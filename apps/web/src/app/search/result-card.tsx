@@ -1,36 +1,16 @@
 "use client";
 
 import { ParsedRealEstate } from "core";
-import {
-  Box,
-  Button,
-  Card,
-  Image,
-  NavLink,
-  Pill,
-  SimpleGrid,
-  Spoiler,
-  Text,
-} from "@mantine/core";
+import { Button, Card, Image, NavLink, SimpleGrid, Text } from "@mantine/core";
 
 export interface ResultCardProps {
   result: ParsedRealEstate;
 }
 
 export const ResultCard: React.FC<ResultCardProps> = ({ result }) => (
-  <Card key={result.id} shadow={"sm"} padding={"md"}>
+  <Card shadow={"sm"} padding={"md"} h={512 + 64}>
     <Card.Section>
-      <Image src={result.photos[0]?.urls.medium} h={192} />
-    </Card.Section>
-
-    <Card.Section inheritPadding mt="sm">
-      <SimpleGrid cols={3}>
-        {result.photos
-          .filter((_, index) => index > 0 && index <= 3)
-          .map((image) => (
-            <Image key={image.id} src={image.urls.small} radius="sm" />
-          ))}
-      </SimpleGrid>
+      <Image src={result.photos[0]?.urls.small} h={192} />
     </Card.Section>
 
     <Text size="lg" mt="sm" fw={600}>
@@ -52,30 +32,35 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result }) => (
       <NavLink
         px="md"
         href={`https://www.google.com/maps/search/?api=1&query=${result.location.latitude},${result.location.longitude}`}
-        label={result.location.macrozone}
+        label={result.location.macrozone ?? result.location.city}
+        description={result.location.microzone ?? result.location.address}
         target="_blank"
       />
     </Card.Section>
 
     <Text size="sm" mt="sm">
-      {[result.contract, `${result.surface} m² `]
-        .filter(Boolean)
-        .join(" \u00b7 ")}
+      {result.surface} m²
     </Text>
 
-    <Text size="sm" mt="sm" c="dimmed">
-      {result.title}
+    <Text size="sm" mt="sm">
+      {result.contract}
     </Text>
 
-    {result.description && (
-      <Text size="xs" mt="sm" c="dimmed">
-        <Spoiler maxHeight={80} showLabel="More" hideLabel="Less">
-          {result.description}
-        </Spoiler>
+    {result.title && (
+      <Text flex={1} size="xs" mt="sm" c="dimmed">
+        {result.title}
       </Text>
     )}
 
-    <Box flex={1} />
+    <Card.Section inheritPadding mt="sm">
+      <SimpleGrid cols={3}>
+        {result.photos
+          .filter((_, index) => index > 0 && index <= 3)
+          .map((image) => (
+            <Image key={image.id} src={image.urls.thumb} radius="sm" />
+          ))}
+      </SimpleGrid>
+    </Card.Section>
 
     <Button
       mt="sm"

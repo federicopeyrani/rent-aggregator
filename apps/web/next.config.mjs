@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    transpilePackages: ["core"]
+  redirects: () => [{ source: "/", destination: "/search", permanent: true }],
+  transpilePackages: ["core"],
 };
 
 export default nextConfig;

@@ -63,9 +63,11 @@ export interface Location {
   longitude: number;
   region: string;
   province: string;
-  macrozone: string;
-  microzone: string;
+  macrozone: string | null;
+  microzone: string | null;
   city: string;
+  address: string | null;
+  streetNumber: string | null;
 }
 
 export interface Photo {
