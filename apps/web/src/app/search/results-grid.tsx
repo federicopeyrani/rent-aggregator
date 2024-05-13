@@ -15,7 +15,10 @@ export const ResultsGrid: React.FC<ResultsGridProps> = ({
   error,
   data,
 }) => {
-  const [parent] = useAutoAnimate();
+  const [parent] = useAutoAnimate({
+    duration: 400,
+    easing: "cubic-bezier(0.25, 0.1, 0.25, 1)",
+  });
 
   if (isLoading && !data) {
     return (

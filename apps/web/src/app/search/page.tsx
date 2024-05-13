@@ -21,14 +21,16 @@ export default function Page() {
         router.push(`/search/query?${params.toString()}`);
       }}
     >
-      <Stack justify={"center"} align={"center"} h={"100vh"}>
+      <Stack justify={"center"} align={"center"} w={"max-content"} m={"auto"}>
         <Input
           type={"url"}
           name={"url"}
           placeholder={"Paste a search URL\u2026"}
         />
 
-        <Button type="submit">Search</Button>
+        <Button fullWidth type="submit">
+          Search
+        </Button>
       </Stack>
     </form>
   );

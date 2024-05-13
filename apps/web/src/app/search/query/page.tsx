@@ -41,37 +41,42 @@ export default function Page({
     Array.isArray(value) ? value.map((v) => [key, v]) : [[key, value]],
   );
 
-  const [items, setItems] = useState<ParsedRealEstate[]>([]);
+  const [items, setItems] = useState<Set<ParsedRealEstate>>(new Set());
 
   const { isLoading } = useSWR(
     ["search", city, _searchParams],
     async ([, city, query]) => {
-      setItems([]);
-
       const response = streamSearchByQuery({ city, query });
       const iterator = iterateStreamResponse(response);
 
+      const batch: ParsedRealEstate[] = [];
+
       for await (const result of iterator) {
-        setItems((items) => [...items, result]);
+        batch.push(result);
+
+        if (batch.length !== 10) {
+          continue;
+        }
+
+        setItems((items) => new Set([...items, ...batch]));
+        batch.length = 0;
       }
     },
   );
 
   const sortedItems = useMemo(
     () =>
-      [...items].sort(
-        (a, b) =>
-          a.price +
-          (a.condominiumExpenses ?? 0) -
-          b.price -
-          (b.condominiumExpenses ?? 0),
-      ),
+      [...items]
+        .filter((item) => item.photos.length > 2)
+        .sort(
+          (a, b) =>
+            a.price +
+            (a.condominiumExpenses ?? 0) -
+            b.price -
+            (b.condominiumExpenses ?? 0),
+        ),
     [items],
   );
 
-  return (
-    <Stack gap={"md"} py={"xl"} px={"xl"}>
-      <ResultsGrid isLoading={isLoading} data={sortedItems} />
-    </Stack>
-  );
+  return <ResultsGrid isLoading={isLoading} data={sortedItems} />;
 }
