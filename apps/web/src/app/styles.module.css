@@ -1,0 +1,6 @@
+.ResultsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 256px);
+  grid-gap: 1rem;
+  justify-content: center;
+}
