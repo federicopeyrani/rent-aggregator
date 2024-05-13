@@ -16,7 +16,6 @@ const afterCallback: AfterCallbackAppRoute = async (_req, session, a) => {
   return session;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 export const GET = handleAuth({
   callback: (async (req, ctx) => {
     try {

@@ -1,2 +1,2 @@
-export { search } from "./search.ts";
-export type { ParsedRealEstate } from "./model/ParsedRealEstate.ts";
+export { search } from "./search";
+export type { ParsedRealEstate } from "./model/ParsedRealEstate";

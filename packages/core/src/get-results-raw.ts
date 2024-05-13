@@ -1,4 +1,4 @@
-import type { Data, ResultsPageProps } from "./model/Props.ts";
+import type { Data, ResultsPageProps } from "./model/Props";
 
 export const getResultsRaw = async (
   location: string,

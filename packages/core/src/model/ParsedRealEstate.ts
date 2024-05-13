@@ -1,4 +1,4 @@
-import type { DetailedRealEstate, Photo, Location } from "./Props.ts";
+import type { DetailedRealEstate, Photo, Location } from "./Props";
 
 export interface ParsedRealEstate {
   id: number;

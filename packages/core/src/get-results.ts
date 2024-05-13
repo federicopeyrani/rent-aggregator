@@ -1,4 +1,4 @@
-import { getResultsRaw } from "./get-results-raw.ts";
+import { getResultsRaw } from "./get-results-raw";
 
 export const getResults = async (
   location: string,

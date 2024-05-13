@@ -1,4 +1,4 @@
-import type { Data, DetailPageProps, ResultsPageProps } from "./model/Props.ts";
+import type { Data, DetailPageProps, ResultsPageProps } from "./model/Props";
 
 export const getInfo = async (id: number) => {
   const page = await fetch(`https://www.immobiliare.it/annunci/${id}`).then(

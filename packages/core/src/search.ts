@@ -1,7 +1,7 @@
-import { getInfo } from "./get-info.ts";
-import type { DetailedRealEstate } from "./model/Props.ts";
-import { getResults } from "./get-results.ts";
-import type { ParsedRealEstate } from "./model/ParsedRealEstate.ts";
+import { getInfo } from "./get-info";
+import type { DetailedRealEstate } from "./model/Props";
+import { getResults } from "./get-results";
+import type { ParsedRealEstate } from "./model/ParsedRealEstate";
 
 const parseSurface = (result: DetailedRealEstate) => {
   const value = result.properties[0]!.surface;
@@ -43,8 +43,6 @@ export const search = async (
   location: string,
   query: string[][] | Record<string, string> | string | URLSearchParams,
 ) => {
-  console.log("Searching for: ", location, query);
-
   const results = await getResults(location, query);
 
   const details = await Promise.all(
