@@ -8,6 +8,7 @@ import { ResultsGrid } from "@/app/search/results-grid";
 import useSWR from "swr";
 import { useMemo, useState } from "react";
 import { ParsedRealEstate } from "core";
+import { uniqBy } from "lodash";
 
 const iterateStreamResponse = <T extends any>(
   streamResponse: Promise<StreamResponseChunk<T>>,
@@ -43,17 +44,25 @@ export default function Page({
     Array.isArray(value) ? value.map((v) => [key, v]) : [[key, value]],
   );
 
-  const [items, setItems] = useState<Set<ParsedRealEstate>>(new Set());
+  const [partialItems, setPartialItems] = useState<ParsedRealEstate[]>([]);
 
-  const { isLoading } = useSWR(
+  const { data, isLoading } = useSWR(
     ["search", city, _searchParams],
     async ([, city, query]) => {
       const response = streamSearchByQuery({ city, query });
       const iterator = iterateStreamResponse(response);
 
+      setPartialItems([]);
+      const data: ParsedRealEstate[] = [];
+
       for await (const result of iterator) {
-        setItems((items) => new Set([...items, ...result]));
+        data.push(...result);
+        setPartialItems((items) =>
+          uniqBy([...items, ...result], ({ id }) => id),
+        );
       }
+
+      return data;
     },
     {
       revalidateOnReconnect: false,
@@ -64,7 +73,7 @@ export default function Page({
 
   const sortedItems = useMemo(
     () =>
-      [...items]
+      (data ?? [...partialItems])
         .filter((item) => item.photos.length > 2)
         .sort(
           (a, b) =>
@@ -73,7 +82,7 @@ export default function Page({
             b.price -
             (b.condominiumExpenses ?? 0),
         ),
-    [items],
+    [data, partialItems],
   );
 
   return <ResultsGrid isLoading={isLoading} data={sortedItems} />;

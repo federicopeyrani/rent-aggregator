@@ -1,5 +1,6 @@
 {
   "name": "immobiliare-scraper",
+  "private": true,
   "workspaces": [
     "apps/*",
     "packages/*"
