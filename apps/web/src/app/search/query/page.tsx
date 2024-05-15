@@ -5,7 +5,6 @@ import {
   streamSearchByQuery,
 } from "@/app/search/search-by-query";
 import { ResultsGrid } from "@/app/search/results-grid";
-import { Stack } from "@mantine/core";
 import useSWR from "swr";
 import { useMemo, useState } from "react";
 import { ParsedRealEstate } from "core";
@@ -18,8 +17,11 @@ const iterateStreamResponse = <T extends any>(
     async next() {
       const { iteratorResult, next } = await this.current;
 
-      if (next) this.current = next;
-      else iteratorResult.done = true;
+      if (next) {
+        this.current = next;
+      } else {
+        iteratorResult.done = true;
+      }
 
       return iteratorResult;
     },
@@ -49,18 +51,14 @@ export default function Page({
       const response = streamSearchByQuery({ city, query });
       const iterator = iterateStreamResponse(response);
 
-      const batch: ParsedRealEstate[] = [];
-
       for await (const result of iterator) {
-        batch.push(result);
-
-        if (batch.length !== 10) {
-          continue;
-        }
-
-        setItems((items) => new Set([...items, ...batch]));
-        batch.length = 0;
+        setItems((items) => new Set([...items, ...result]));
       }
+    },
+    {
+      revalidateOnReconnect: false,
+      revalidateOnFocus: false,
+      revalidateIfStale: false,
     },
   );
 
